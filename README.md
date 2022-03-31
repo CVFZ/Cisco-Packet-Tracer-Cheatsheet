@@ -127,6 +127,10 @@ Um den Port zu setzen wird zuerst ein Port ausgewählt (also `interface ...`) un
 ### Access Ports
 Access Ports sind Ports, an denen normale Geräte kommunizieren können. Konfiguration ähnlich zu den Trunk Ports. `switchport mode access` und `switchport access vlan VLAN`.
 
+### NAT / PAT
+Zuerst wählt man das Interface aus (`interface Giga/Fast x/x/x`). Dann kann man mit dem Befehl `ip nat outside` bzw. `ip nat inside` die Richtige Seite einstellen. Dann muss noch eine access list erstellt werden. Dazu verwendet man `ip access-list standard PAT_ACL` (PAT_ACL = Name des Interface). Dann können die IPs erlaubt werden. Das geht mit `permit *IP Adresse* *Wildcard*`. Die Wildcard ist eine invertierte Subnetmaske. Bspw. 255.255.224.0 == 0.0.31.255. 
+Dann dieses wieder verlassen und `ip nat inside source list PAT_ACL interface GigabitEthernet 0/0/0 overload` (hier muss der Name der Liste und des Interfaces richtig sein!). Für die Verbindung zurück werden IP Routern verwendet (bspw. `ip route 20.77.64.0 255.255.224.0 20.77.255.254`).
+
 ---
 
 ## Multilayer Switch
